@@ -1,9 +1,9 @@
 import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, OneToMany } from 'typeorm';
-import { BookEntity } from './book.entity';
 import { User } from '../../../../domain/entities/user.entity';
+import { IBookModel, IUserModel } from './model-interfaces';
 
 @Entity('users')
-export class UserEntity implements User {
+export class UserModel implements User, IUserModel {
   @PrimaryGeneratedColumn('uuid')
   id!: string;
 
@@ -19,8 +19,8 @@ export class UserEntity implements User {
   @Column({ default: 'user' })
   role!: string;
 
-  @OneToMany(() => BookEntity, book => book.user)
-  books!: BookEntity[];
+  @OneToMany('BookModel', 'user')
+  books!: IBookModel[];
 
   @CreateDateColumn()
   createdAt!: Date;

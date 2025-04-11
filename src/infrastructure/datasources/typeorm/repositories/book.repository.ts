@@ -1,17 +1,17 @@
 import { Repository } from 'typeorm';
-import { BookEntity } from '../entities/book.entity';
-import { BookModel, CreateBookDto, UpdateBookDto } from '../../../../domain/models/book.model';
+import { BookModel } from '../models/book.model';
+import { BookModel as DomainBookModel, CreateBookDto, UpdateBookDto } from '../../../../domain/models/book.model';
 import { BookRepository } from '../../../../domain/repositories/book-repository.interface';
 import { AppDataSource } from '../../../../config/database';
 
 export class TypeOrmBookRepository implements BookRepository {
-  private repository: Repository<BookEntity>;
+  private repository: Repository<BookModel>;
   
   constructor() {
-    this.repository = AppDataSource.getRepository(BookEntity);
+    this.repository = AppDataSource.getRepository(BookModel);
   }
   
-  async findById(id: string): Promise<BookModel | null> {
+  async findById(id: string): Promise<DomainBookModel | null> {
     const book = await this.repository.findOne({ 
       where: { id },
       relations: ['user']
@@ -20,14 +20,14 @@ export class TypeOrmBookRepository implements BookRepository {
     return book ? book : null;
   }
   
-  async findByUserId(userId: string): Promise<BookModel[]> {
+  async findByUserId(userId: string): Promise<DomainBookModel[]> {
     return this.repository.find({
       where: { userId },
       relations: ['user']
     });
   }
   
-  async create(bookData: CreateBookDto, userId: string): Promise<BookModel> {
+  async create(bookData: CreateBookDto, userId: string): Promise<DomainBookModel> {
     const book = this.repository.create({
       ...bookData,
       userId
@@ -36,7 +36,7 @@ export class TypeOrmBookRepository implements BookRepository {
     return this.repository.save(book);
   }
   
-  async update(id: string, bookData: UpdateBookDto): Promise<BookModel | null> {
+  async update(id: string, bookData: UpdateBookDto): Promise<DomainBookModel | null> {
     const book = await this.findById(id);
     
     if (!book) {
@@ -52,7 +52,7 @@ export class TypeOrmBookRepository implements BookRepository {
     return result.affected !== 0;
   }
   
-  async findAll(): Promise<BookModel[]> {
+  async findAll(): Promise<DomainBookModel[]> {
     return this.repository.find({
       relations: ['user']
     });

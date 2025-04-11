@@ -1,28 +1,28 @@
 import { Repository } from 'typeorm';
-import { UserEntity } from '../entities/user.entity';
-import { UserModel, UserRegisterDto } from '../../../../domain/models/user.model';
+import { UserModel } from '../models/user.model';
+import { UserModel as DomainUserModel, UserRegisterDto } from '../../../../domain/models/user.model';
 import { UserRepository } from '../../../../domain/repositories/user-repository.interface';
 import { AppDataSource } from '../../../../config/database';
 import { PasswordHasher } from '../../../../domain/services/password-hasher.interface';
 
 export class TypeOrmUserRepository implements UserRepository {
-  private repository: Repository<UserEntity>;
+  private repository: Repository<UserModel>;
   
   constructor(private readonly passwordHasher: PasswordHasher) {
-    this.repository = AppDataSource.getRepository(UserEntity);
+    this.repository = AppDataSource.getRepository(UserModel);
   }
   
-  async findById(id: string): Promise<UserModel | null> {
+  async findById(id: string): Promise<DomainUserModel | null> {
     const user = await this.repository.findOne({ where: { id } });
     return user ? user : null;
   }
   
-  async findByEmail(email: string): Promise<UserModel | null> {
+  async findByEmail(email: string): Promise<DomainUserModel | null> {
     const user = await this.repository.findOne({ where: { email } });
     return user ? user : null;
   }
   
-  async create(userData: UserRegisterDto): Promise<UserModel> {
+  async create(userData: UserRegisterDto): Promise<DomainUserModel> {
     const hashedPassword = await this.passwordHasher.hash(userData.password);
     
     const user = this.repository.create({
@@ -35,7 +35,7 @@ export class TypeOrmUserRepository implements UserRepository {
     return this.repository.save(user);
   }
   
-  async update(id: string, userData: Partial<UserModel>): Promise<UserModel | null> {
+  async update(id: string, userData: Partial<DomainUserModel>): Promise<DomainUserModel | null> {
     const user = await this.findById(id);
     
     if (!user) {
@@ -55,7 +55,7 @@ export class TypeOrmUserRepository implements UserRepository {
     return result.affected !== 0;
   }
   
-  async findAll(): Promise<UserModel[]> {
+  async findAll(): Promise<DomainUserModel[]> {
     return this.repository.find();
   }
 } 

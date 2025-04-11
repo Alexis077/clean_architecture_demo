@@ -1,9 +1,9 @@
 import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, ManyToOne, JoinColumn } from 'typeorm';
-import { UserEntity } from './user.entity';
 import { Book } from '../../../../domain/entities/book.entity';
+import { IBookModel, IUserModel } from './model-interfaces';
 
 @Entity('books')
-export class BookEntity implements Book {
+export class BookModel implements Book, IBookModel {
   @PrimaryGeneratedColumn('uuid')
   id!: string;
 
@@ -37,9 +37,9 @@ export class BookEntity implements Book {
   @Column({ nullable: true })
   googleBooksId?: string;
 
-  @ManyToOne(() => UserEntity, user => user.books)
+  @ManyToOne('UserModel', 'books')
   @JoinColumn({ name: 'userId' })
-  user!: UserEntity;
+  user!: IUserModel;
 
   @Column()
   userId!: string;
