@@ -175,7 +175,7 @@ classDiagram
         +Date updatedAt
     }
     
-    User "1" --> "n" Book : has
+    User "1" --> "0..*" Book : has
 ```
 
 ## Diagrama de Casos de Uso
