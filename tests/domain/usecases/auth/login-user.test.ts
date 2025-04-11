@@ -2,7 +2,8 @@ import { LoginUser } from '../../../../src/domain/usecases/auth/login-user.useca
 import { UserRepository } from '../../../../src/domain/repositories/user-repository.interface';
 import { PasswordHasher } from '../../../../src/domain/services/password-hasher.interface';
 import { TokenGenerator, TokenPayload } from '../../../../src/domain/services/token-generator.interface';
-import { UserLoginDto, UserModel } from '../../../../src/domain/models/user.model';
+import { UserLoginDto } from '../../../../src/domain/dtos/user.dto';
+import { User } from '../../../../src/domain/entities/user.entity';
 
 describe('LoginUser UseCase', () => {
   let loginUser: LoginUser;
@@ -44,7 +45,7 @@ describe('LoginUser UseCase', () => {
       password: 'password123'
     };
 
-    const user: UserModel = {
+    const user: User = {
       id: '1',
       name: 'Test User',
       email: 'test@example.com',
@@ -106,7 +107,7 @@ describe('LoginUser UseCase', () => {
       password: 'wrong_password'
     };
 
-    const user: UserModel = {
+    const user: User = {
       id: '1',
       name: 'Test User',
       email: 'test@example.com',

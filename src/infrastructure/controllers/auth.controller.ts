@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
 import { RegisterUserUseCase } from '../../domain/usecases/auth/register-user.usecase';
 import { LoginUserUseCase } from '../../domain/usecases/auth/login-user.usecase';
-import { UserLoginDto, UserRegisterDto } from '../../domain/models/user.model';
+import { UserLoginDto, UserRegisterDto } from '../../domain/dtos/user.dto';
 
 export class AuthController {
   constructor(

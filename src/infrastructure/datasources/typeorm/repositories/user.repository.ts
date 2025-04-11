@@ -1,6 +1,7 @@
 import { Repository } from 'typeorm';
 import { UserModel } from '../models/user.model';
-import { UserModel as DomainUserModel, UserRegisterDto } from '../../../../domain/models/user.model';
+import { User } from '../../../../domain/entities/user.entity';
+import { UserRegisterDto } from '../../../../domain/dtos/user.dto';
 import { UserRepository } from '../../../../domain/repositories/user-repository.interface';
 import { AppDataSource } from '../../../../config/database';
 import { PasswordHasher } from '../../../../domain/services/password-hasher.interface';
@@ -12,17 +13,17 @@ export class TypeOrmUserRepository implements UserRepository {
     this.repository = AppDataSource.getRepository(UserModel);
   }
   
-  async findById(id: string): Promise<DomainUserModel | null> {
+  async findById(id: string): Promise<User | null> {
     const user = await this.repository.findOne({ where: { id } });
     return user ? user : null;
   }
   
-  async findByEmail(email: string): Promise<DomainUserModel | null> {
+  async findByEmail(email: string): Promise<User | null> {
     const user = await this.repository.findOne({ where: { email } });
     return user ? user : null;
   }
   
-  async create(userData: UserRegisterDto): Promise<DomainUserModel> {
+  async create(userData: UserRegisterDto): Promise<User> {
     const hashedPassword = await this.passwordHasher.hash(userData.password);
     
     const user = this.repository.create({
@@ -35,7 +36,7 @@ export class TypeOrmUserRepository implements UserRepository {
     return this.repository.save(user);
   }
   
-  async update(id: string, userData: Partial<DomainUserModel>): Promise<DomainUserModel | null> {
+  async update(id: string, userData: Partial<User>): Promise<User | null> {
     const user = await this.findById(id);
     
     if (!user) {
@@ -55,7 +56,7 @@ export class TypeOrmUserRepository implements UserRepository {
     return result.affected !== 0;
   }
   
-  async findAll(): Promise<DomainUserModel[]> {
+  async findAll(): Promise<User[]> {
     return this.repository.find();
   }
 } 

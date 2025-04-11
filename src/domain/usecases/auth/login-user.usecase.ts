@@ -1,4 +1,4 @@
-import { UserLoginDto, UserWithToken } from '../../models/user.model';
+import { UserLoginDto, UserWithToken } from '../../dtos/user.dto';
 import { UserRepository } from '../../repositories/user-repository.interface';
 import { PasswordHasher } from '../../services/password-hasher.interface';
 import { TokenGenerator } from '../../services/token-generator.interface';

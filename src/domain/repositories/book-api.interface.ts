@@ -1,4 +1,4 @@
-import { BookModel } from '../models/book.model';
+import { Book } from '../entities/book.entity';
 
 export interface BookExternalDto {
   id: string;
@@ -22,6 +22,6 @@ export interface BookExternalDto {
 }
 
 export interface BookApiInterface {
-  searchBooks(query: string): Promise<BookModel[]>;
-  getBookById(id: string): Promise<BookModel | null>;
+  searchBooks(query: string): Promise<Book[]>;
+  getBookById(id: string): Promise<Book | null>;
 } 

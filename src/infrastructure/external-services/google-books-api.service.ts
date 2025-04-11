@@ -1,13 +1,13 @@
 import axios from 'axios';
+import { Book } from '../../domain/entities/book.entity';
 import { BookApiInterface, BookExternalDto } from '../../domain/repositories/book-api.interface';
-import { BookModel } from '../../domain/models/book.model';
 import { config } from '../../config/env';
 
 export class GoogleBooksApiService implements BookApiInterface {
   private readonly apiUrl = 'https://www.googleapis.com/books/v1/volumes';
   private readonly apiKey = config.googleBooksApiKey;
   
-  async searchBooks(query: string): Promise<BookModel[]> {
+  async searchBooks(query: string): Promise<Book[]> {
     try {
       const response = await axios.get(`${this.apiUrl}?q=${encodeURIComponent(query)}&key=${this.apiKey}`);
       
@@ -22,7 +22,7 @@ export class GoogleBooksApiService implements BookApiInterface {
     }
   }
   
-  async getBookById(id: string): Promise<BookModel | null> {
+  async getBookById(id: string): Promise<Book | null> {
     try {
       const response = await axios.get(`${this.apiUrl}/${id}?key=${this.apiKey}`);
       return this.mapToBookModel(response.data);
@@ -32,7 +32,7 @@ export class GoogleBooksApiService implements BookApiInterface {
     }
   }
   
-  private mapToBookModel(bookData: BookExternalDto): BookModel {
+  private mapToBookModel(bookData: BookExternalDto): Book {
     const volumeInfo = bookData.volumeInfo;
     let isbn = '';
     

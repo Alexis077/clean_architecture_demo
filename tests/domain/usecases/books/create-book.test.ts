@@ -1,6 +1,7 @@
 import { CreateBook } from '../../../../src/domain/usecases/books/create-book.usecase';
 import { BookRepository } from '../../../../src/domain/repositories/book-repository.interface';
-import { BookModel, CreateBookDto } from '../../../../src/domain/models/book.model';
+import { Book } from '../../../../src/domain/entities/book.entity';
+import { CreateBookDto } from '../../../../src/domain/dtos/book.dto';
 
 describe('CreateBook UseCase', () => {
   let createBook: CreateBook;
@@ -29,7 +30,7 @@ describe('CreateBook UseCase', () => {
       isbn: '9780134494166'
     };
 
-    const createdBook: BookModel = {
+    const createdBook: Book = {
       id: 'book-123',
       title: 'Clean Architecture',
       author: 'Robert C. Martin',

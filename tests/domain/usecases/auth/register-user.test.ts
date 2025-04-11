@@ -1,6 +1,7 @@
 import { RegisterUser } from '../../../../src/domain/usecases/auth/register-user.usecase';
 import { UserRepository } from '../../../../src/domain/repositories/user-repository.interface';
-import { UserRegisterDto, UserModel } from '../../../../src/domain/models/user.model';
+import { UserRegisterDto } from '../../../../src/domain/dtos/user.dto';
+import { User } from '../../../../src/domain/entities/user.entity';
 
 describe('RegisterUser UseCase', () => {
   let registerUser: RegisterUser;
@@ -28,7 +29,7 @@ describe('RegisterUser UseCase', () => {
       password: 'password123'
     };
 
-    const createdUser: UserModel = {
+    const createdUser: User = {
       id: '1',
       name: 'Test User',
       email: 'test@example.com',
@@ -63,7 +64,7 @@ describe('RegisterUser UseCase', () => {
       password: 'password123'
     };
 
-    const existingUser: UserModel = {
+    const existingUser: User = {
       id: '1',
       name: 'Existing User',
       email: 'existing@example.com',

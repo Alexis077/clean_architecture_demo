@@ -1,13 +1,3 @@
-export interface UserModel {
-  id: string;
-  name: string;
-  email: string;
-  password: string;
-  role: string;
-  createdAt: Date;
-  updatedAt: Date;
-}
-
 export interface UserDto {
   id: string;
   name: string;
@@ -28,4 +18,4 @@ export interface UserLoginDto {
 
 export interface UserWithToken extends UserDto {
   token: string;
-} 
+}

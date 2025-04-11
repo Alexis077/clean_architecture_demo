@@ -1,4 +1,5 @@
-import { UserModel, UserRegisterDto, UserDto } from '../../models/user.model';
+import { User } from '../../entities/user.entity';
+import { UserRegisterDto, UserDto } from '../../dtos/user.dto';
 import { UserRepository } from '../../repositories/user-repository.interface';
 
 export interface RegisterUserUseCase {
