@@ -21,7 +21,7 @@ Este proyecto es una demostración técnica de arquitectura limpia (Clean Archit
 src/
 ├── domain/                  # Capa de dominio
 │   ├── entities/            # Entidades puras de dominio (sin dependencias externas)
-│   ├── models/              # Modelos y DTOs
+│   ├── dtos/                # Data Transfer Objects (DTOs)
 │   ├── repositories/        # Interfaces de repositorios
 │   ├── services/            # Interfaces de servicios
 │   └── usecases/            # Casos de uso
@@ -94,6 +94,8 @@ graph TD
         Token_Generator_Interface["Token Generator Interface"]
         User_Entity["User Entity"]
         Book_Entity["Book Entity"]
+        User_DTOs["User DTOs"]
+        Book_DTOs["Book DTOs"]
     end
 
     subgraph "Infrastructure Layer"
@@ -130,6 +132,11 @@ graph TD
     Update_Book --> Book_Repository_Interface
     Delete_Book --> Book_Repository_Interface
     Search_Books_External --> Book_API_Interface
+
+    Register_User --> User_DTOs
+    Login_User --> User_DTOs
+    Create_Book --> Book_DTOs
+    Update_Book --> Book_DTOs
 
     User_Repository_Interface --> User_Repository_Impl
     Book_Repository_Interface --> Book_Repository_Impl
@@ -321,11 +328,40 @@ Este proyecto sigue los principios de Clean Architecture, que incluyen:
 4. **Independencia de base de datos**: Las entidades y reglas de negocio son independientes de la persistencia.
 5. **Independencia de agentes externos**: El núcleo no depende de servicios externos.
 
+### Mejoras recientes en la arquitectura
+
+Se han realizado mejoras para reforzar los principios de Clean Architecture:
+
+- Eliminación de la capa de modelos redundante, utilizando directamente las entidades del dominio.
+- Creación de una capa separada para DTOs (Data Transfer Objects) que facilita la comunicación entre capas.
+- Mayor separación entre la representación del dominio (entidades) y los objetos de transferencia de datos (DTOs).
+- Simplificación de las dependencias, promoviendo un diseño más coherente y mantenible.
+
+#### Estructura actual de Entidades y DTOs
+
+En la nueva estructura:
+
+- **Entidades**: Representan objetos fundamentales del dominio con todas sus propiedades y comportamientos. Son la base del modelo de dominio y contienen las reglas de negocio fundamentales.
+  - `User`: Entidad que representa un usuario en el sistema.
+  - `Book`: Entidad que representa un libro en el sistema.
+
+- **DTOs (Data Transfer Objects)**: Objetos simples utilizados para transferir datos entre procesos o capas, especialmente útiles para definir contratos de API.
+  - `UserDto`: Representación simplificada de un usuario para respuestas de API.
+  - `UserRegisterDto`: Datos necesarios para registrar un usuario.
+  - `UserLoginDto`: Datos necesarios para iniciar sesión.
+  - `UserWithToken`: Usuario con token JWT para autenticación.
+  - `BookDto`: Representación simplificada de un libro para respuestas de API.
+  - `CreateBookDto`: Datos necesarios para crear un libro.
+  - `UpdateBookDto`: Datos para actualizar un libro existente.
+
+Esta separación proporciona una mayor claridad en las responsabilidades y mejora la capacidad de evolucionar la API y el modelo de dominio de manera independiente.
+
 ### Separación clara entre dominio e infraestructura
 
 La arquitectura ha sido estructurada para proporcionar una clara separación:
 
 - Las entidades de dominio son interfaces puras sin anotaciones ni dependencias de frameworks
+- Los DTOs (Data Transfer Objects) separan las representaciones internas (entidades) de los datos que se envían/reciben a través de las interfaces de la aplicación
 - Las implementaciones concretas (como entidades TypeORM) están en la capa de infraestructura
 - Los repositorios del dominio son interfaces, y las implementaciones concretas están en infraestructura
 - Las reglas de negocio están contenidas en los casos de uso, que trabajan con abstracciones
