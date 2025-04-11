@@ -332,9 +332,9 @@ El proyecto sigue estas mejores prácticas para pruebas:
 
 ```mermaid
 graph BT
-    A[Entities] <-- B[Use Cases]
-    B <-- C[Controllers/Presenters/Gateways]
-    C <-- D[UI/DB/Web/Devices/External Interfaces]
+    A[Entities] --> B[Use Cases]
+    B --> C[Controllers/Presenters/Gateways]
+    C --> D[UI/DB/Web/Devices/External Interfaces]
 ```
 
 ## Licencia
