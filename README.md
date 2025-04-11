@@ -20,8 +20,8 @@ Este proyecto es una demostración técnica de arquitectura limpia (Clean Archit
 ```
 src/
 ├── domain/                  # Capa de dominio
-│   ├── entities/            # Entidades de dominio
-│   ├── models/              # Modelos de datos
+│   ├── entities/            # Entidades puras de dominio (sin dependencias externas)
+│   ├── models/              # Modelos y DTOs
 │   ├── repositories/        # Interfaces de repositorios
 │   ├── services/            # Interfaces de servicios
 │   └── usecases/            # Casos de uso
@@ -30,6 +30,9 @@ src/
 ├── infrastructure/          # Capa de infraestructura
 │   ├── controllers/         # Controladores
 │   ├── datasources/         # Implementaciones de fuentes de datos
+│   │   └── typeorm/         # Implementación de TypeORM
+│   │       ├── entities/    # Entidades ORM (implementan entidades de dominio)
+│   │       └── repositories/# Repositorios TypeORM (implementan interfaces de dominio)
 │   ├── external-services/   # Servicios externos
 │   ├── middlewares/         # Middlewares
 │   ├── routes/              # Rutas
@@ -308,15 +311,24 @@ Las pruebas están estructuradas según la arquitectura:
 - **GET /api/books/search?q=query** - Buscar libros en Google Books API
 - **GET /api/books/external/:id** - Obtener un libro de Google Books API por ID
 
-## Principios de Arquitectura Limpia
+## Principios de Clean Architecture implementados
 
-Este proyecto sigue los principios de Clean Architecture:
+Este proyecto sigue los principios de Clean Architecture, que incluyen:
 
-1. **Independencia de frameworks**: El núcleo de la aplicación no depende de la existencia de ninguna biblioteca.
-2. **Testabilidad**: Las reglas de negocio se pueden probar sin la UI, base de datos, servidor web u otro elemento externo.
-3. **Independencia de la UI**: La UI puede cambiar fácilmente sin cambiar el resto del sistema.
-4. **Independencia de la base de datos**: Se puede cambiar PostgreSQL por otra base de datos sin afectar las reglas de negocio.
-5. **Independencia de cualquier agencia externa**: Las reglas de negocio no conocen nada del mundo exterior.
+1. **Independencia de frameworks**: El dominio no depende de ningún framework externo.
+2. **Testeabilidad**: Los componentes son fácilmente testables en aislamiento.
+3. **Independencia de la UI**: La lógica de negocio es independiente de la interfaz de usuario.
+4. **Independencia de base de datos**: Las entidades y reglas de negocio son independientes de la persistencia.
+5. **Independencia de agentes externos**: El núcleo no depende de servicios externos.
+
+### Separación clara entre dominio e infraestructura
+
+La arquitectura ha sido estructurada para proporcionar una clara separación:
+
+- Las entidades de dominio son interfaces puras sin anotaciones ni dependencias de frameworks
+- Las implementaciones concretas (como entidades TypeORM) están en la capa de infraestructura
+- Los repositorios del dominio son interfaces, y las implementaciones concretas están en infraestructura
+- Las reglas de negocio están contenidas en los casos de uso, que trabajan con abstracciones
 
 ## Principios y Prácticas de Testing
 

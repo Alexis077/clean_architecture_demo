@@ -1,7 +1,7 @@
 import { DataSource } from 'typeorm';
 import dotenv from 'dotenv';
-import { User } from '../domain/entities/user.entity';
-import { Book } from '../domain/entities/book.entity';
+import { UserEntity } from '../infrastructure/datasources/typeorm/entities/user.entity';
+import { BookEntity } from '../infrastructure/datasources/typeorm/entities/book.entity';
 
 dotenv.config();
 
@@ -14,7 +14,7 @@ export const AppDataSource = new DataSource({
   database: process.env.POSTGRES_DB || 'book_management',
   synchronize: process.env.NODE_ENV === 'development',
   logging: process.env.NODE_ENV === 'development',
-  entities: [User, Book],
+  entities: [UserEntity, BookEntity],
   subscribers: [],
   migrations: [],
 });

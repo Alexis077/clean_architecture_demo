@@ -1,14 +1,14 @@
 import { Repository } from 'typeorm';
-import { Book } from '../../../../domain/entities/book.entity';
+import { BookEntity } from '../entities/book.entity';
 import { BookModel, CreateBookDto, UpdateBookDto } from '../../../../domain/models/book.model';
 import { BookRepository } from '../../../../domain/repositories/book-repository.interface';
 import { AppDataSource } from '../../../../config/database';
 
 export class TypeOrmBookRepository implements BookRepository {
-  private repository: Repository<Book>;
+  private repository: Repository<BookEntity>;
   
   constructor() {
-    this.repository = AppDataSource.getRepository(Book);
+    this.repository = AppDataSource.getRepository(BookEntity);
   }
   
   async findById(id: string): Promise<BookModel | null> {

@@ -1,15 +1,15 @@
 import { Repository } from 'typeorm';
-import { User } from '../../../../domain/entities/user.entity';
+import { UserEntity } from '../entities/user.entity';
 import { UserModel, UserRegisterDto } from '../../../../domain/models/user.model';
 import { UserRepository } from '../../../../domain/repositories/user-repository.interface';
 import { AppDataSource } from '../../../../config/database';
 import { PasswordHasher } from '../../../../domain/services/password-hasher.interface';
 
 export class TypeOrmUserRepository implements UserRepository {
-  private repository: Repository<User>;
+  private repository: Repository<UserEntity>;
   
   constructor(private readonly passwordHasher: PasswordHasher) {
-    this.repository = AppDataSource.getRepository(User);
+    this.repository = AppDataSource.getRepository(UserEntity);
   }
   
   async findById(id: string): Promise<UserModel | null> {
