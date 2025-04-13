@@ -1,6 +1,6 @@
-import { User } from '../../entities/user.entity';
-import { UserRegisterDto, UserDto } from '../../dtos/user.dto';
-import { UserRepository } from '../../repositories/user-repository.interface';
+import { User } from '../../../domain/entities/user.entity';
+import { UserRegisterDto, UserDto } from '../../../domain/dtos/user.dto';
+import { UserRepository } from '../../../domain/repositories/user-repository.interface';
 
 export interface RegisterUserUseCase {
   execute(userData: UserRegisterDto): Promise<UserDto>;

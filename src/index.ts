@@ -13,13 +13,13 @@ import { JwtTokenGenerator } from './infrastructure/services/jwt-token-generator
 import { GoogleBooksApiService } from './infrastructure/external-services/google-books-api.service';
 
 // Use cases
-import { RegisterUser } from './domain/usecases/auth/register-user.usecase';
-import { LoginUser } from './domain/usecases/auth/login-user.usecase';
-import { CreateBook } from './domain/usecases/books/create-book.usecase';
-import { GetBooks } from './domain/usecases/books/get-books.usecase';
-import { UpdateBook } from './domain/usecases/books/update-book.usecase';
-import { DeleteBook } from './domain/usecases/books/delete-book.usecase';
-import { SearchBooksExternal } from './domain/usecases/books/search-books-external.usecase';
+import { RegisterUser } from './application/usecases/auth/register-user.usecase';
+import { LoginUser } from './application/usecases/auth/login-user.usecase';
+import { CreateBook } from './application/usecases/books/create-book.usecase';
+import { GetBooks } from './application/usecases/books/get-books.usecase';
+import { UpdateBook } from './application/usecases/books/update-book.usecase';
+import { DeleteBook } from './application/usecases/books/delete-book.usecase';
+import { SearchBooksExternal } from './application/usecases/books/search-books-external.usecase';
 
 // Controllers
 import { AuthController } from './infrastructure/controllers/auth.controller';

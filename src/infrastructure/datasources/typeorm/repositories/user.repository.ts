@@ -4,7 +4,7 @@ import { User } from '../../../../domain/entities/user.entity';
 import { UserRegisterDto } from '../../../../domain/dtos/user.dto';
 import { UserRepository } from '../../../../domain/repositories/user-repository.interface';
 import { AppDataSource } from '../../../../config/database';
-import { PasswordHasher } from '../../../../domain/services/password-hasher.interface';
+import { PasswordHasher } from '../../../../application/services/password-hasher.interface';
 
 export class TypeOrmUserRepository implements UserRepository {
   private repository: Repository<UserModel>;

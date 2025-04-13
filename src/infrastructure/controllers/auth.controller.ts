@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
-import { RegisterUserUseCase } from '../../domain/usecases/auth/register-user.usecase';
-import { LoginUserUseCase } from '../../domain/usecases/auth/login-user.usecase';
+import { RegisterUserUseCase } from '../../application/usecases/auth/register-user.usecase';
+import { LoginUserUseCase } from '../../application/usecases/auth/login-user.usecase';
 import { UserLoginDto, UserRegisterDto } from '../../domain/dtos/user.dto';
 
 export class AuthController {

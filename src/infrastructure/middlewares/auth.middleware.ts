@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from 'express';
-import { TokenGenerator } from '../../domain/services/token-generator.interface';
+import { TokenGenerator } from '../../application/services/token-generator.interface';
 
 declare global {
   namespace Express {

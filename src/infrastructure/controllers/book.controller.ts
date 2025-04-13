@@ -1,11 +1,11 @@
 import { Request, Response } from 'express';
-import { CreateBookUseCase } from '../../domain/usecases/books/create-book.usecase';
-import { GetBooksUseCase } from '../../domain/usecases/books/get-books.usecase';
-import { UpdateBookUseCase } from '../../domain/usecases/books/update-book.usecase';
-import { DeleteBookUseCase } from '../../domain/usecases/books/delete-book.usecase';
-import { SearchBooksExternalUseCase } from '../../domain/usecases/books/search-books-external.usecase';
+import { CreateBookUseCase } from '../../application/usecases/books/create-book.usecase';
+import { GetBooksUseCase } from '../../application/usecases/books/get-books.usecase';
+import { UpdateBookUseCase } from '../../application/usecases/books/update-book.usecase';
+import { DeleteBookUseCase } from '../../application/usecases/books/delete-book.usecase';
+import { SearchBooksExternalUseCase } from '../../application/usecases/books/search-books-external.usecase';
 import { CreateBookDto, UpdateBookDto } from '../../domain/dtos/book.dto';
-import { TokenPayload } from '../../domain/services/token-generator.interface';
+import { TokenPayload } from '../../application/services/token-generator.interface';
 
 export class BookController {
   constructor(

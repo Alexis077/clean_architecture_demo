@@ -1,5 +1,5 @@
-import { Book } from '../../entities/book.entity';
-import { BookRepository } from '../../repositories/book-repository.interface';
+import { Book } from '../../../domain/entities/book.entity';
+import { BookRepository } from '../../../domain/repositories/book-repository.interface';
 
 export interface GetBooksUseCase {
   execute(): Promise<Book[]>;

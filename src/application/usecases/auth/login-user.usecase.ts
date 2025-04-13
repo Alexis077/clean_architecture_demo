@@ -1,5 +1,5 @@
-import { UserLoginDto, UserWithToken } from '../../dtos/user.dto';
-import { UserRepository } from '../../repositories/user-repository.interface';
+import { UserLoginDto, UserWithToken } from '../../../domain/dtos/user.dto';
+import { UserRepository } from '../../../domain/repositories/user-repository.interface';
 import { PasswordHasher } from '../../services/password-hasher.interface';
 import { TokenGenerator } from '../../services/token-generator.interface';
 

@@ -1,5 +1,6 @@
-import { Book } from '../../entities/book.entity';
-import { BookApiInterface } from '../../repositories/book-api.interface';
+import { Book } from '../../../domain/entities/book.entity';
+import { BookRepository } from '../../../domain/repositories/book-repository.interface';
+import { BookApiInterface } from '../../../domain/repositories/book-api.interface';
 
 export interface SearchBooksExternalUseCase {
   execute(query: string): Promise<Book[]>;

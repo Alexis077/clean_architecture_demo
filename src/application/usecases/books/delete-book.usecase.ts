@@ -1,4 +1,4 @@
-import { BookRepository } from '../../repositories/book-repository.interface';
+import { BookRepository } from '../../../domain/repositories/book-repository.interface';
 
 export interface DeleteBookUseCase {
   execute(id: string): Promise<boolean>;
