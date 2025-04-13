@@ -1,4 +1,4 @@
-import { RegisterUser } from '../../../../src/domain/usecases/auth/register-user.usecase';
+import { RegisterUser } from '../../../../src/application/usecases/auth/register-user.usecase';
 import { UserRepository } from '../../../../src/domain/repositories/user-repository.interface';
 import { UserRegisterDto } from '../../../../src/domain/dtos/user.dto';
 import { User } from '../../../../src/domain/entities/user.entity';

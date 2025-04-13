@@ -1,7 +1,7 @@
-import { CreateBook } from '../../../../src/domain/usecases/books/create-book.usecase';
+import { CreateBook } from '../../../../src/application/usecases/books/create-book.usecase';
 import { BookRepository } from '../../../../src/domain/repositories/book-repository.interface';
-import { Book } from '../../../../src/domain/entities/book.entity';
 import { CreateBookDto } from '../../../../src/domain/dtos/book.dto';
+import { Book } from '../../../../src/domain/entities/book.entity';
 
 describe('CreateBook UseCase', () => {
   let createBook: CreateBook;

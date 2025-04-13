@@ -1,6 +1,6 @@
 import * as jwt from 'jsonwebtoken';
 import { JwtTokenGenerator } from '../../../src/infrastructure/services/jwt-token-generator';
-import { TokenPayload } from '../../../src/domain/services/token-generator.interface';
+import { TokenPayload } from '../../../src/application/services/token-generator.interface';
 import { config } from '../../../src/config/env';
 
 // Mock de jsonwebtoken
