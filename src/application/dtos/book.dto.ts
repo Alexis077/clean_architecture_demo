@@ -26,4 +26,25 @@ export interface CreateBookDto {
   googleBooksId?: string;
 }
 
-export interface UpdateBookDto extends Partial<CreateBookDto> {} 
+export interface UpdateBookDto extends Partial<CreateBookDto> {}
+
+export interface BookExternalDto {
+  id: string;
+  volumeInfo: {
+    title: string;
+    subtitle?: string;
+    authors?: string[];
+    publishedDate?: string;
+    description?: string;
+    publisher?: string;
+    industryIdentifiers?: Array<{
+      type: string;
+      identifier: string;
+    }>;
+    pageCount?: number;
+    imageLinks?: {
+      thumbnail?: string;
+      smallThumbnail?: string;
+    };
+  };
+} 
