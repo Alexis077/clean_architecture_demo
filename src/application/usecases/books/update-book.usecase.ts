@@ -1,6 +1,7 @@
 import { Book } from '../../../domain/entities/book.entity';
 import { UpdateBookDto } from '../../../application/dtos/book.dto';
 import { BookRepository } from '../../../domain/repositories/book-repository.interface';
+import { BookMapper } from '../../../application/mappers/book.mapper';
 
 export interface UpdateBookUseCase {
   execute(id: string, bookData: UpdateBookDto): Promise<Book | null>;
@@ -16,17 +17,9 @@ export class UpdateBook implements UpdateBookUseCase {
       return null;
     }
     
-    return this.bookRepository.update(id, {
-      title: bookData.title,
-      subtitle: bookData.subtitle,
-      author: bookData.author,
-      description: bookData.description,
-      publishedDate: bookData.publishedDate,
-      publisher: bookData.publisher,
-      isbn: bookData.isbn,
-      pageCount: bookData.pageCount,
-      imageUrl: bookData.imageUrl,
-      googleBooksId: bookData.googleBooksId
-    });
+    // Usar el mapper para convertir el DTO a una entidad de dominio
+    const updatedBookEntity = BookMapper.toUpdateEntity(book, bookData);
+    
+    return this.bookRepository.update(id, updatedBookEntity);
   }
 } 
