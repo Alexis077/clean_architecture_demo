@@ -1,5 +1,5 @@
 import { Book } from '../../../domain/entities/book.entity';
-import { UpdateBookDto } from '../../../domain/dtos/book.dto';
+import { UpdateBookDto } from '../../../application/dtos/book.dto';
 import { BookRepository } from '../../../domain/repositories/book-repository.interface';
 
 export interface UpdateBookUseCase {
@@ -16,6 +16,17 @@ export class UpdateBook implements UpdateBookUseCase {
       return null;
     }
     
-    return this.bookRepository.update(id, bookData);
+    return this.bookRepository.update(id, {
+      title: bookData.title,
+      subtitle: bookData.subtitle,
+      author: bookData.author,
+      description: bookData.description,
+      publishedDate: bookData.publishedDate,
+      publisher: bookData.publisher,
+      isbn: bookData.isbn,
+      pageCount: bookData.pageCount,
+      imageUrl: bookData.imageUrl,
+      googleBooksId: bookData.googleBooksId
+    });
   }
 } 

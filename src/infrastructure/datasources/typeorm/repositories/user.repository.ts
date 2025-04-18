@@ -1,7 +1,7 @@
 import { Repository } from 'typeorm';
 import { UserModel } from '../models/user.model';
 import { User } from '../../../../domain/entities/user.entity';
-import { UserRegisterDto } from '../../../../domain/dtos/user.dto';
+import { UserRegisterDto } from '../../../../application/dtos/user.dto';
 import { UserRepository } from '../../../../domain/repositories/user-repository.interface';
 import { AppDataSource } from '../../../../config/database';
 import { PasswordHasher } from '../../../../application/services/password-hasher.interface';
@@ -23,7 +23,11 @@ export class TypeOrmUserRepository implements UserRepository {
     return user ? user : null;
   }
   
-  async create(userData: UserRegisterDto): Promise<User> {
+  async create(userData: {
+    name: string;
+    email: string;
+    password: string;
+  }): Promise<User> {
     const hashedPassword = await this.passwordHasher.hash(userData.password);
     
     const user = this.repository.create({

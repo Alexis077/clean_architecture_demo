@@ -4,7 +4,7 @@ import { GetBooksUseCase } from '../../application/usecases/books/get-books.usec
 import { UpdateBookUseCase } from '../../application/usecases/books/update-book.usecase';
 import { DeleteBookUseCase } from '../../application/usecases/books/delete-book.usecase';
 import { SearchBooksExternalUseCase } from '../../application/usecases/books/search-books-external.usecase';
-import { CreateBookDto, UpdateBookDto } from '../../domain/dtos/book.dto';
+import { CreateBookDto, UpdateBookDto } from '../../application/dtos/book.dto';
 import { TokenPayload } from '../../application/services/token-generator.interface';
 
 export class BookController {

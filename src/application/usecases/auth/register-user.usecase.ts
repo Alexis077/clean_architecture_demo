@@ -1,5 +1,5 @@
 import { User } from '../../../domain/entities/user.entity';
-import { UserRegisterDto, UserDto } from '../../../domain/dtos/user.dto';
+import { UserRegisterDto, UserDto } from '../../../application/dtos/user.dto';
 import { UserRepository } from '../../../domain/repositories/user-repository.interface';
 
 export interface RegisterUserUseCase {
@@ -16,7 +16,11 @@ export class RegisterUser implements RegisterUserUseCase {
       throw new Error('User with this email already exists');
     }
     
-    const user = await this.userRepository.create(userData);
+    const user = await this.userRepository.create({
+      name: userData.name,
+      email: userData.email,
+      password: userData.password
+    });
     
     return {
       id: user.id,

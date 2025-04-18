@@ -1,7 +1,7 @@
 import { Repository } from 'typeorm';
 import { BookModel } from '../models/book.model';
 import { Book } from '../../../../domain/entities/book.entity';
-import { CreateBookDto, UpdateBookDto } from '../../../../domain/dtos/book.dto';
+import { CreateBookDto, UpdateBookDto } from '../../../../application/dtos/book.dto';
 import { BookRepository } from '../../../../domain/repositories/book-repository.interface';
 import { AppDataSource } from '../../../../config/database';
 
@@ -28,7 +28,18 @@ export class TypeOrmBookRepository implements BookRepository {
     });
   }
   
-  async create(bookData: CreateBookDto, userId: string): Promise<Book> {
+  async create(bookData: {
+    title: string;
+    subtitle?: string;
+    author: string;
+    description?: string;
+    publishedDate?: string;
+    publisher?: string;
+    isbn?: string;
+    pageCount?: number;
+    imageUrl?: string;
+    googleBooksId?: string;
+  }, userId: string): Promise<Book> {
     const book = this.repository.create({
       ...bookData,
       userId
@@ -37,7 +48,18 @@ export class TypeOrmBookRepository implements BookRepository {
     return this.repository.save(book);
   }
   
-  async update(id: string, bookData: UpdateBookDto): Promise<Book | null> {
+  async update(id: string, bookData: Partial<{
+    title: string;
+    subtitle?: string;
+    author: string;
+    description?: string;
+    publishedDate?: string;
+    publisher?: string;
+    isbn?: string;
+    pageCount?: number;
+    imageUrl?: string;
+    googleBooksId?: string;
+  }>): Promise<Book | null> {
     const book = await this.findById(id);
     
     if (!book) {

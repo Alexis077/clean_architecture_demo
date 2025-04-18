@@ -18,4 +18,4 @@ export interface UserLoginDto {
 
 export interface UserWithToken extends UserDto {
   token: string;
-}
+} 

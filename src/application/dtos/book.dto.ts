@@ -26,4 +26,4 @@ export interface CreateBookDto {
   googleBooksId?: string;
 }
 
-export interface UpdateBookDto extends Partial<CreateBookDto> {}
+export interface UpdateBookDto extends Partial<CreateBookDto> {} 

@@ -2,7 +2,7 @@ import { LoginUser } from '../../../../src/application/usecases/auth/login-user.
 import { UserRepository } from '../../../../src/domain/repositories/user-repository.interface';
 import { PasswordHasher } from '../../../../src/application/services/password-hasher.interface';
 import { TokenGenerator, TokenPayload } from '../../../../src/application/services/token-generator.interface';
-import { UserLoginDto } from '../../../../src/domain/dtos/user.dto';
+import { UserLoginDto } from '../../../../src/application/dtos/user.dto';
 import { User } from '../../../../src/domain/entities/user.entity';
 
 describe('LoginUser UseCase', () => {
