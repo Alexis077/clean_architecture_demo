@@ -1,10 +1,12 @@
 // Entidad de dominio pura sin dependencias externas
-export interface User {
-  id: string;
-  name: string;
-  email: string;
-  password: string;
-  role: string;
-  createdAt: Date;
-  updatedAt: Date;
+export class User {
+  constructor(
+    public id: string,
+    public name: string,
+    public email: string,
+    public password: string,
+    public role: string,
+    public createdAt: Date,
+    public updatedAt: Date,
+  ) {}
 } 

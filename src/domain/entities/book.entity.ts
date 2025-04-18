@@ -1,17 +1,19 @@
 // Entidad de dominio pura sin dependencias externas
-export interface Book {
-  id: string;
-  title: string;
-  subtitle?: string;
-  author: string;
-  description?: string;
-  publishedDate?: string;
-  publisher?: string;
-  isbn?: string;
-  pageCount?: number;
-  imageUrl?: string;
-  googleBooksId?: string;
-  userId: string;
-  createdAt: Date;
-  updatedAt: Date;
+export class Book {
+  constructor(
+    public id: string,
+    public title: string,
+    public author: string,
+    public userId: string,
+    public createdAt: Date,
+    public updatedAt: Date,
+    public subtitle?: string,
+    public description?: string,
+    public publishedDate?: string,
+    public publisher?: string,
+    public isbn?: string,
+    public pageCount?: number,
+    public imageUrl?: string,
+    public googleBooksId?: string,
+  ) {}
 } 
