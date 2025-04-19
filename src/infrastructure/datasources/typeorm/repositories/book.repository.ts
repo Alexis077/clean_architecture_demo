@@ -3,6 +3,7 @@ import { BookModel } from '../models/book.model';
 import { Book } from '../../../../domain/entities/book.entity';
 import { BookRepository } from '../../../../domain/repositories/book-repository.interface';
 import { AppDataSource } from '../../../../config/database';
+import { BookMapper } from '../mappers/book.mapper';
 
 export class TypeOrmBookRepository implements BookRepository {
   private repository: Repository<BookModel>;
@@ -17,35 +18,24 @@ export class TypeOrmBookRepository implements BookRepository {
       relations: ['user']
     });
     
-    return book ? book : null;
+    return book ? BookMapper.toDomain(book) : null;
   }
   
   async findByUserId(userId: string): Promise<Book[]> {
-    return this.repository.find({
+    const books = await this.repository.find({
       where: { userId },
       relations: ['user']
     });
+    
+    return books.map(book => BookMapper.toDomain(book));
   }
   
   async create(book: Book): Promise<Book> {
-    const bookModel = this.repository.create({
-      id: book.id,
-      title: book.title,
-      subtitle: book.subtitle,
-      author: book.author,
-      description: book.description,
-      publishedDate: book.publishedDate,
-      publisher: book.publisher,
-      isbn: book.isbn,
-      pageCount: book.pageCount,
-      imageUrl: book.imageUrl,
-      googleBooksId: book.googleBooksId,
-      userId: book.userId,
-      createdAt: book.createdAt,
-      updatedAt: book.updatedAt
-    });
+    const bookData = BookMapper.toPersistence(book);
+    const bookModel = this.repository.create(bookData);
     
-    return this.repository.save(bookModel);
+    const savedBook = await this.repository.save(bookModel);
+    return BookMapper.toDomain(savedBook);
   }
   
   async update(id: string, bookData: Partial<{
@@ -67,7 +57,12 @@ export class TypeOrmBookRepository implements BookRepository {
     }
     
     await this.repository.update(id, bookData);
-    return this.findById(id);
+    const updatedBook = await this.repository.findOne({
+      where: { id },
+      relations: ['user']
+    });
+    
+    return updatedBook ? BookMapper.toDomain(updatedBook) : null;
   }
   
   async delete(id: string): Promise<boolean> {
@@ -76,8 +71,10 @@ export class TypeOrmBookRepository implements BookRepository {
   }
   
   async findAll(): Promise<Book[]> {
-    return this.repository.find({
+    const books = await this.repository.find({
       relations: ['user']
     });
+    
+    return books.map(book => BookMapper.toDomain(book));
   }
 } 
