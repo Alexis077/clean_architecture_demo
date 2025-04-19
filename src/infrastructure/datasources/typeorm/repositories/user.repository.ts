@@ -5,6 +5,7 @@ import { UserRegisterDto } from '../../../../application/dtos/user.dto';
 import { UserRepository } from '../../../../domain/repositories/user-repository.interface';
 import { AppDataSource } from '../../../../config/database';
 import { PasswordHasher } from '../../../../application/services/password-hasher.interface';
+import { UserMapper } from '../mappers/user.mapper';
 
 export class TypeOrmUserRepository implements UserRepository {
   private repository: Repository<UserModel>;
@@ -15,44 +16,45 @@ export class TypeOrmUserRepository implements UserRepository {
   
   async findById(id: string): Promise<User | null> {
     const user = await this.repository.findOne({ where: { id } });
-    return user ? user : null;
+    return user ? UserMapper.toDomain(user) : null;
   }
   
   async findByEmail(email: string): Promise<User | null> {
     const user = await this.repository.findOne({ where: { email } });
-    return user ? user : null;
+    return user ? UserMapper.toDomain(user) : null;
   }
   
-  async create(userData: {
-    name: string;
-    email: string;
-    password: string;
-  }): Promise<User> {
+  async create(userData: User): Promise<User> {
     const hashedPassword = await this.passwordHasher.hash(userData.password);
     
-    const user = this.repository.create({
-      name: userData.name,
-      email: userData.email,
-      password: hashedPassword,
-      role: 'user'
-    });
+    // Create a copy of userData with hashed password
+    const userDataWithHashedPassword = {
+      ...userData,
+      password: hashedPassword
+    };
     
-    return this.repository.save(user);
+    const userModel = this.repository.create(UserMapper.toPersistence(userDataWithHashedPassword));
+    const savedUser = await this.repository.save(userModel);
+    return UserMapper.toDomain(savedUser);
   }
   
-  async update(id: string, userData: Partial<User>): Promise<User | null> {
+  async update(id: string, userData: User): Promise<User | null> {
     const user = await this.findById(id);
     
     if (!user) {
       return null;
     }
     
+    // Hash password if provided
     if (userData.password) {
       userData.password = await this.passwordHasher.hash(userData.password);
     }
     
-    await this.repository.update(id, userData);
-    return this.findById(id);
+    const userModelData = UserMapper.toPersistence(userData);
+    await this.repository.update(id, userModelData);
+    
+    const updatedUser = await this.repository.findOne({ where: { id } });
+    return updatedUser ? UserMapper.toDomain(updatedUser) : null;
   }
   
   async delete(id: string): Promise<boolean> {
@@ -61,6 +63,7 @@ export class TypeOrmUserRepository implements UserRepository {
   }
   
   async findAll(): Promise<User[]> {
-    return this.repository.find();
+    const users = await this.repository.find();
+    return users.map(user => UserMapper.toDomain(user));
   }
 } 
