@@ -38,18 +38,7 @@ export class TypeOrmBookRepository implements BookRepository {
     return BookMapper.toDomain(savedBook);
   }
   
-  async update(id: string, bookData: Partial<{
-    title: string;
-    subtitle?: string;
-    author: string;
-    description?: string;
-    publishedDate?: string;
-    publisher?: string;
-    isbn?: string;
-    pageCount?: number;
-    imageUrl?: string;
-    googleBooksId?: string;
-  }>): Promise<Book | null> {
+  async update(id: string, bookData: Book): Promise<Book | null> {
     const book = await this.findById(id);
     
     if (!book) {
