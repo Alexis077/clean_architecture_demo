@@ -1,7 +1,29 @@
 import axios from 'axios';
 import { Book } from '../../domain/entities/book.entity';
-import { BookApiInterface, BookExternalDto } from '../../domain/repositories/book-api.interface';
+import { BookApiInterface } from '../../domain/repositories/book-api.interface';
 import { config } from '../../config/env';
+
+// Defining the interface locally instead of importing it
+export interface BookExternalDto {
+  id: string;
+  volumeInfo: {
+    title: string;
+    subtitle?: string;
+    authors?: string[];
+    description?: string;
+    publishedDate?: string;
+    publisher?: string;
+    industryIdentifiers?: Array<{
+      type: string;
+      identifier: string;
+    }>;
+    pageCount?: number;
+    imageLinks?: {
+      smallThumbnail?: string;
+      thumbnail?: string;
+    };
+  };
+}
 
 export class GoogleBooksApiService implements BookApiInterface {
   private readonly apiUrl = 'https://www.googleapis.com/books/v1/volumes';
