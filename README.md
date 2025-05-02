@@ -138,42 +138,6 @@ graph TD
     TypeOrmBookRepo --> BookEntity
 ```
 
-## Diagrama de Entidades
-
-```mermaid
-classDiagram
-    class User {
-        +string id
-        +string name
-        +string email
-        +string password
-        +string role
-        +Date createdAt
-        +Date updatedAt
-        +Book[] books
-    }
-    
-    class Book {
-        +string id
-        +string title
-        +string subtitle
-        +string author
-        +string description
-        +string publishedDate
-        +string publisher
-        +string isbn
-        +number pageCount
-        +string imageUrl
-        +string googleBooksId
-        +string userId
-        +User user
-        +Date createdAt
-        +Date updatedAt
-    }
-    
-    User "1" --> "0..*" Book : has
-```
-
 ## Diagrama de Casos de Uso
 
 ```mermaid
