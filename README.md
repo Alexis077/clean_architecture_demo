@@ -19,137 +19,123 @@ Este proyecto es una demostración técnica de arquitectura limpia (Clean Archit
 
 ```
 src/
-├── domain/                  # Capa de dominio
-│   ├── entities/            # Entidades puras de dominio (sin dependencias externas)
-│   ├── dtos/                # Data Transfer Objects (DTOs)
-│   ├── repositories/        # Interfaces de repositorios
-│   ├── services/            # Interfaces de servicios
-│   └── usecases/            # Casos de uso
-├── application/             # Capa de aplicación
-│   └── usecases/            # Implementación de casos de uso
-├── infrastructure/          # Capa de infraestructura
-│   ├── controllers/         # Controladores
-│   ├── datasources/         # Implementaciones de fuentes de datos
-│   │   └── typeorm/         # Implementación de TypeORM
-│   │       ├── entities/    # Entidades ORM (implementan entidades de dominio)
-│   │       └── repositories/# Repositorios TypeORM (implementan interfaces de dominio)
-│   ├── external-services/   # Servicios externos
-│   ├── middlewares/         # Middlewares
-│   ├── routes/              # Rutas
-│   └── server.ts            # Configuración del servidor
-├── interfaces/              # Capa de interfaz
-│   ├── controllers/         # Controladores
-│   ├── routes/              # Rutas
-│   └── middlewares/         # Middlewares
-├── presentation/            # Capa de presentación
-│   └── server/              # Implementación del servidor
-├── config/                  # Configuración
-└── index.ts                 # Punto de entrada
+├── domain/
+│   ├── entities/
+│   └── repositories/
+├── application/
+│   ├── dtos/
+│   ├── mappers/
+│   ├── services/
+│   └── usecases/
+├── config/
+│   ├── database.ts
+│   └── env.ts
+├── infrastructure/
+│   ├── server.ts
+│   ├── controllers/
+│   ├── datasources/
+│   │   └── typeorm/
+│   │       ├── models/
+│   │       ├── mappers/
+│   │       └── repositories/
+│   ├── external-services/
+│   ├── middlewares/
+│   ├── routes/
+│   └── services/
+└── index.ts
 
 tests/
-├── unit/                    # Pruebas unitarias
-│   ├── domain/              # Pruebas de dominio
-│   └── infrastructure/      # Pruebas de infraestructura
-├── integration/             # Pruebas de integración
-│   ├── controllers/         # Pruebas de controladores
-│   ├── middlewares/         # Pruebas de middlewares
-│   └── repositories/        # Pruebas de repositorios
-├── e2e/                     # Pruebas end-to-end
-└── setup.ts                 # Configuración de pruebas
+├── application/
+│   ├── mappers/
+│   └── usecases/
+├── infrastructure/
+│   └── services/
+└── setup.ts
 ```
 
 ## Diagrama de Arquitectura
 
 ```mermaid
 graph TD
-    subgraph "Presentation Layer"
-        Server
-    end
-
-    subgraph "Interface Layer"
-        Interface
-        Auth_Routes["Auth Routes"]
-        Book_Routes["Book Routes"]
-        Auth_Middleware["Auth Middleware"]
-        Validation_Middleware["Validation Middleware"]
-    end
-
-    subgraph "Application Layer"
-        Auth_Controller["Auth Controller"]
-        Book_Controller["Book Controller"]
-    end
-
-    subgraph "Domain Layer"
-        Register_User["Register User Use Case"]
-        Login_User["Login User Use Case"]
-        Create_Book["Create Book Use Case"]
-        Get_Books["Get Books Use Case"]
-        Update_Book["Update Book Use Case"]
-        Delete_Book["Delete Book Use Case"]
-        Search_Books_External["Search Books External Use Case"]
-        User_Repository_Interface["User Repository Interface"]
-        Book_Repository_Interface["Book Repository Interface"]
-        Book_API_Interface["Book API Interface"]
-        Password_Hasher_Interface["Password Hasher Interface"]
-        Token_Generator_Interface["Token Generator Interface"]
-        User_Entity["User Entity"]
-        Book_Entity["Book Entity"]
-        User_DTOs["User DTOs"]
-        Book_DTOs["Book DTOs"]
+    subgraph "Entry Point"
+        Index["src/index.ts (Bootstrap)"]
+        InitDB["initializeDatabase()"]
     end
 
     subgraph "Infrastructure Layer"
-        User_Repository_Impl["TypeORM User Repository"]
-        Book_Repository_Impl["TypeORM Book Repository"]
-        Bcrypt_Password_Hasher["Bcrypt Password Hasher"]
-        JWT_Token_Generator["JWT Token Generator"]
-        Google_Books_API["Google Books API Service"]
-        Database["PostgreSQL Database"]
+        Server["Server (server.ts)"]
+        Router["createRouter (routes/index.ts)"]
+        AuthRoutes["/api/auth"]
+        BookRoutes["/api/books"]
+        Health["/health"]
+        AuthMiddleware["AuthMiddleware"]
+        ValidationMiddleware["ValidationMiddleware"]
+        AuthController["AuthController"]
+        BookController["BookController"]
+        TypeOrmUserRepo["TypeOrmUserRepository"]
+        TypeOrmBookRepo["TypeOrmBookRepository"]
+        BcryptHasher["BcryptPasswordHasher"]
+        JwtGenerator["JwtTokenGenerator"]
+        GoogleService["GoogleBooksApiService"]
     end
 
-    Server --> Interface
-    Interface --> Auth_Routes
-    Interface --> Book_Routes
+    subgraph "Application Layer"
+        RegisterUser["RegisterUser UseCase"]
+        LoginUser["LoginUser UseCase"]
+        CreateBook["CreateBook UseCase"]
+        GetBooks["GetBooks UseCase"]
+        UpdateBook["UpdateBook UseCase"]
+        DeleteBook["DeleteBook UseCase"]
+        SearchBooksExternal["SearchBooksExternal UseCase"]
+    end
 
-    Auth_Routes --> Auth_Controller
-    Book_Routes --> Book_Controller
-    Book_Routes --> Auth_Middleware
+    subgraph "Domain Layer"
+        UserEntity["User Entity"]
+        BookEntity["Book Entity"]
+        IUserRepo["UserRepository Interface"]
+        IBookRepo["BookRepository Interface"]
+        IBookApi["BookApi Interface"]
+        IPasswordHasher["PasswordHasher Interface"]
+        ITokenGenerator["TokenGenerator Interface"]
+    end
 
-    Auth_Controller --> Register_User
-    Auth_Controller --> Login_User
-    Book_Controller --> Create_Book
-    Book_Controller --> Get_Books
-    Book_Controller --> Update_Book
-    Book_Controller --> Delete_Book
-    Book_Controller --> Search_Books_External
+    Index --> InitDB
+    Index --> Server
+    Server --> Router
+    Router --> AuthRoutes
+    Router --> BookRoutes
+    Router --> Health
+    AuthRoutes --> AuthController
+    BookRoutes --> BookController
+    BookRoutes --> AuthMiddleware
+    BookRoutes --> ValidationMiddleware
 
-    Register_User --> User_Repository_Interface
-    Login_User --> User_Repository_Interface
-    Login_User --> Password_Hasher_Interface
-    Login_User --> Token_Generator_Interface
-    Create_Book --> Book_Repository_Interface
-    Get_Books --> Book_Repository_Interface
-    Update_Book --> Book_Repository_Interface
-    Delete_Book --> Book_Repository_Interface
-    Search_Books_External --> Book_API_Interface
+    AuthController --> RegisterUser
+    AuthController --> LoginUser
+    BookController --> CreateBook
+    BookController --> GetBooks
+    BookController --> UpdateBook
+    BookController --> DeleteBook
+    BookController --> SearchBooksExternal
 
-    Register_User --> User_DTOs
-    Login_User --> User_DTOs
-    Create_Book --> Book_DTOs
-    Update_Book --> Book_DTOs
+    RegisterUser --> IUserRepo
+    LoginUser --> IUserRepo
+    LoginUser --> IPasswordHasher
+    LoginUser --> ITokenGenerator
+    CreateBook --> IBookRepo
+    GetBooks --> IBookRepo
+    UpdateBook --> IBookRepo
+    DeleteBook --> IBookRepo
+    SearchBooksExternal --> IBookApi
 
-    User_Repository_Interface --> User_Repository_Impl
-    Book_Repository_Interface --> Book_Repository_Impl
-    Password_Hasher_Interface --> Bcrypt_Password_Hasher
-    Token_Generator_Interface --> JWT_Token_Generator
-    Book_API_Interface --> Google_Books_API
+    IUserRepo --> TypeOrmUserRepo
+    IBookRepo --> TypeOrmBookRepo
+    IPasswordHasher --> BcryptHasher
+    ITokenGenerator --> JwtGenerator
+    IBookApi --> GoogleService
 
-    User_Repository_Impl --> Database
-    Book_Repository_Impl --> Database
-
-    User_Repository_Impl --> User_Entity
-    Book_Repository_Impl --> Book_Entity
-    Auth_Middleware --> Token_Generator_Interface
+    TypeOrmUserRepo --> UserEntity
+    TypeOrmBookRepo --> BookEntity
 ```
 
 ## Diagrama de Entidades
@@ -210,69 +196,109 @@ graph LR
 
 ## Instalación y Configuración
 
-### Requisitos Previos
+### Prerequisitos
 
 - Node.js (v14 o superior)
 - PostgreSQL
 - npm o yarn
 
-### Pasos de Instalación
+### Configuración de Variables de Entorno
 
-1. Clonar el repositorio:
-```bash
-git clone <url-del-repositorio>
-cd clean-architecture-demo
-```
+Crear archivo `.env` en raíz con:
 
-2. Instalar dependencias:
-```bash
-npm install
 ```
-
-3. Configurar variables de entorno:
-Crear un archivo `.env` en la raíz del proyecto con el siguiente contenido:
-```
-# Database configuration
 POSTGRES_HOST=localhost
 POSTGRES_PORT=5432
 POSTGRES_USER=postgres
 POSTGRES_PASSWORD=postgres
 POSTGRES_DB=book_management
 
-# Server configuration
 PORT=3000
 NODE_ENV=development
 
-# JWT Configuration
-JWT_SECRET=your_jwt_secret_key
+JWT_SECRET=tu_jwt_secret_key
 JWT_EXPIRES_IN=1h
 
-# External API
-GOOGLE_BOOKS_API_KEY=your_google_books_api_key
+GOOGLE_BOOKS_API_KEY=tu_google_books_api_key
 ```
 
-4. Para las pruebas, crea un archivo `.env.test` con configuración específica para test:
+Para pruebas en `.env.test`:
+
 ```
-# Database configuration for tests
 POSTGRES_HOST=localhost
 POSTGRES_PORT=5432
 POSTGRES_USER=postgres_test
 POSTGRES_PASSWORD=postgres_test
 POSTGRES_DB=book_management_test
 
-# Server configuration
 PORT=3001
 NODE_ENV=test
 
-# JWT Configuration
 JWT_SECRET=test_jwt_secret_key
 JWT_EXPIRES_IN=1h
 
-# External API
 GOOGLE_BOOKS_API_KEY=test_google_books_api_key
 ```
 
-5. Iniciar el servidor en modo desarrollo:
+### Instalación de Dependencias
+
+```bash
+npm install
+```
+
+### Scripts npm
+
+| Comando              | Descripción                                    |
+| -------------------- | ---------------------------------------------- |
+| npm run dev          | Iniciar servidor en modo desarrollo             |
+| npm run build        | Compilar TypeScript                            |
+| npm start            | Iniciar servidor desde `dist/index.js`         |
+| npm test             | Ejecutar todas las pruebas                     |
+| npm run test:watch   | Ejecutar pruebas en modo watch                 |
+| npm run test:coverage| Generar cobertura de pruebas                   |
+```
+
+```json
+// package.json extract
+"scripts": {
+  "start": "node dist/index.js",
+  "dev": "nodemon --exec ts-node src/index.ts",
+  "build": "tsc",
+  "test": "jest",
+  "test:watch": "jest --watch",
+  "test:coverage": "jest --coverage"
+},
+"dependencies": {
+  "express": "^4.18.2",
+  "typeorm": "^0.3.17",
+  "pg": "^8.11.3",
+  "reflect-metadata": "^0.1.13",
+  "dotenv": "^16.3.1",
+  "cors": "^2.8.5",
+  "helmet": "^7.1.0",
+  "morgan": "^1.10.0",
+  "bcrypt": "^5.1.1",
+  "jsonwebtoken": "^9.0.2",
+  "axios": "^1.6.2",
+  "uuid": "^11.1.0"
+},
+"devDependencies": {
+  "typescript": "^5.3.3",
+  "ts-node": "^10.9.2",
+  "ts-jest": "^29.1.1",
+  "jest": "^29.7.0",
+  "@types/jest": "^29.5.11",
+  "@types/node": "^20.10.4",
+  "nodemon": "^3.0.2",
+  "supertest": "^6.3.3",
+  "@types/supertest": "^6.0.2",
+  "testcontainers": "^10.6.0",
+  "mockdate": "^3.0.5"
+}
+```
+
+## Ejecutar la Aplicación
+
 ```bash
 npm run dev
 ```
